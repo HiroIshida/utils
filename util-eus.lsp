@@ -1,3 +1,4 @@
+;baka
 ;;basic
 (defun range (s e) 
   (let* ((n (+ (- e s) 1))
@@ -6,6 +7,9 @@
       (dotimes (i n)
         (setf (aref arr i) (+ s i)))
       arr)))
+
+(defun assocdr (key alist)
+  (cdr (assoc key alist)))
 
 ;; extended def of vector
 (defun append-vector (vec x)
@@ -92,6 +96,23 @@
                 vec))
   )
 
+(defmethod vector
+  (:sum ()
+   (let ((res 0))
+     (dotimes (i (length self))
+       (setq res (+ res [self i])))
+     res))
+  (:normalize ()
+   (let ((vec-new (copy-object self))
+         (sum (send self :sum)))
+     (dotimes (i (length self))
+       (setf [vec-new i] (/ [self i] sum)))
+     vec-new))
+  )
+
+
+  
+
 (defmethod vector 
   (:mapcar (fn &rest args)
    (let ((nargs (length args))) 
@@ -106,7 +127,7 @@
   (:_mapcar-slice (fn s e)
    (send self :_mapcar-idx-lst fn (range s e)))
 
-  (:_mapcar-idx-lst (fn vec-idx)
+  (:_mapcar-idx-lst (fn vec-idx )
    (when (listp vec-idx) (setq vec-idx (apply #'vector vec-idx)))
    (let* ((N (length vec-idx))
           (vec-ret (make-array N)))
