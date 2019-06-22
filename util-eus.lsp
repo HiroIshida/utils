@@ -127,8 +127,16 @@
      vec-new))
   )
 
-
-  
+(defmethod vector
+  (:get-elem (inp)
+    (let ((idx-vec
+            (if (listp inp) 
+                (apply #'vector inp) 
+                inp)))
+      (let ((ret nil))
+        (dotimes (i (length idx-vec))
+          (push [self [idx-vec i]] ret))
+        (nreverse ret)))))
 
 (defmethod vector 
   (:mapcar (fn &rest args)
@@ -152,6 +160,7 @@
        (setf (aref vec-ret i) (funcall fn (aref self (aref vec-idx i)))))
      vec-ret))
   )
+
 
 #|
 (setq a (vector 1 2 3))
