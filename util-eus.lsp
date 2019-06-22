@@ -97,6 +97,13 @@
   )
 
 (defmethod vector
+  (:find (predicate)
+   (let ((idx-lst nil))
+     (dotimes (i (length self))
+       (when (funcall predicate [self i]) (push i idx-lst)))
+     (apply #'vector (nreverse idx-lst)))))
+
+(defmethod vector
   (:sum ()
    (let ((res 0))
      (dotimes (i (length self))
