@@ -104,6 +104,16 @@
      (apply #'vector (nreverse idx-lst)))))
 
 (defmethod vector
+  (:->list ()
+   (let ((lst-ret nil))
+     (dotimes (i (length self))
+       (push [self i] lst-ret))
+     (nreverse lst-ret))))
+
+(defun vec->lst (vec)
+  (send vec :->list))
+
+(defmethod vector
   (:sum ()
    (let ((res 0))
      (dotimes (i (length self))
